@@ -1,1 +1,65 @@
-<!doctype html><html lang="zh-CN"><meta charset="utf-8"><title>Speculative Inference</title><body><h1>Speculative Inference</h1><p>Application scaffold</p></body></html>
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SmolLM2 Speculative Decoding</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <main>
+    <h1>SmolLM2 投机解码演示</h1>
+    <p class="hint">目标模型 SmolLM2-360M · 草稿模型 SmolLM2-135M · CPU 推理（不承诺提速）</p>
+
+    <form id="generate-form">
+      <label for="text">英文开头</label>
+      <textarea id="text" rows="4" required
+        >Once upon a time in a small town,</textarea>
+
+      <div class="grid">
+        <label>模式
+          <select id="mode">
+            <option value="speculative">投机解码</option>
+            <option value="autoregressive">自回归</option>
+          </select>
+        </label>
+        <label>生成长度
+          <input id="max_new_tokens" type="number" min="1" max="512" value="40">
+        </label>
+        <label>草稿步长 γ
+          <input id="draft_steps" type="number" min="1" max="16" value="4">
+        </label>
+        <label>温度（0 为贪心）
+          <input id="temperature" type="number" min="0" max="2" step="0.1" value="0">
+        </label>
+        <label>种子
+          <input id="seed" type="number" min="0" max="2147483647" value="1234">
+        </label>
+      </div>
+
+      <div class="actions">
+        <button id="start-btn" type="submit">开始续写</button>
+        <button id="stop-btn" type="button" disabled>停止</button>
+      </div>
+      <p id="error" class="error" hidden></p>
+    </form>
+
+    <section>
+      <h2>续写结果</h2>
+      <pre id="output"></pre>
+    </section>
+
+    <section>
+      <h2>统计</h2>
+      <ul id="stats">
+        <li>候选数：<span id="stat-candidates">-</span></li>
+        <li>接受数：<span id="stat-accepted">-</span></li>
+        <li>目标前向次数：<span id="stat-forwards">-</span></li>
+        <li>耗时（秒）：<span id="stat-elapsed">-</span></li>
+        <li>状态：<span id="stat-status">空闲</span></li>
+      </ul>
+    </section>
+  </main>
+  <script src="/static/app.js"></script>
+</body>
+</html>
